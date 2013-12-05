@@ -33,12 +33,10 @@
             };
     })();
 
-
     Polymer('ceci-fireworks', {
-      width: (this.width || 0),
-      height: (this.height || 0),
+      width: 0,
+      height: 0,
       ready: function () {
-  // Q: what does this mean and do?
         this.super();
         this.fireworkSound = (this.fireworkSound || 'Kapow!');
 
@@ -129,8 +127,7 @@
 
           // if the distance traveled, including velocities, is greater than the initial distance to the target, then the target has been reached
           if( this.distanceTraveled >= this.distanceToTarget ) {
-// FIXME: how do i pass the sound with the new Ceci?
-    // this.broadcasts('kaboom', t.fireworkSound);
+            t.kaboom();
             createParticles( this.tx, this.ty, this.hue );
             // remove the firework, use the index passed into the update function to determine which to remove
             fireworks.splice( index, 1 );
@@ -283,30 +280,30 @@
           var n = Number(count);
           if (n > 15){
             n = 15;
-// this.log("launching " + n + " (max) rockets", channel);
+            // this.log("launching " + n + " (max) rockets", channel);
           }
           else{
-// this.log("launching " + n + " rockets", channel);
+            // this.log("launching " + n + " rockets", channel);
           }
           for (var i=0; i < n; i++) {
             this.launchRocket();
           }
         } else {
           this.launchRocket();
-// this.log("launching rocket", channel);
+          // this.log("launching rocket", channel);
         }
-      },
-// do we even need this?
-      fireworkSoundChanged: function (oldValue, newValue) {
-        this.fireworkSound = newValue;
       },
       setNonAttribute: function (v) {
         console.log('test');
+      },
+      kaboom: function(){
+        this.broadcast('kaboom', this.fireworkSound);
       },
       ceci: {
         broadcasts: {
           kaboom: ''
         },
+        defaultBroadcasts: [],
         listeners: {
           shootRocket: 'Shoot Rocket',
           shootThisManyRockets: 'Show This Many Rocket'
